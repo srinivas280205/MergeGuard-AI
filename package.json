@@ -1,0 +1,22 @@
+{
+  "name": "mergeguard-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A browser-based GitHub pull request review and risk scoring dashboard.",
+  "scripts": {
+    "start": "npx serve .",
+    "check": "node --check script.js"
+  },
+  "keywords": [
+    "github",
+    "pull-request",
+    "code-review",
+    "risk-scoring",
+    "static-site"
+  ],
+  "author": "Srinivas",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

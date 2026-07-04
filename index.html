@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MergeGuard AI</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="top-nav" aria-label="Main navigation">
+        <div>
+          <strong>MergeGuard AI</strong>
+          <span>Pull request review and risk scoring</span>
+        </div>
+        <div class="nav-links">
+          <a href="#reviewForm">Review</a>
+          <a href="#report">Report</a>
+          <a href="#reviewHistory">History</a>
+        </div>
+      </nav>
+
+      <section class="panel input-panel">
+        <div class="brand-row">
+          <div>
+            <p class="eyebrow">Firebase Auth</p>
+            <h1>MergeGuard AI</h1>
+          </div>
+          <span class="status-pill">Login Enabled</span>
+        </div>
+
+        <section class="auth-panel" aria-label="Account login and signup">
+          <div class="auth-header">
+            <div>
+              <p class="eyebrow">Account</p>
+              <h2>Login / Signup</h2>
+            </div>
+            <span id="userBadge" class="user-badge">Guest</span>
+          </div>
+
+          <div class="auth-grid">
+            <label>
+              Email
+              <input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+            </label>
+
+            <label>
+              Password
+              <input id="authPassword" type="password" placeholder="Minimum 6 characters" autocomplete="current-password" />
+            </label>
+          </div>
+
+          <div class="actions auth-actions">
+            <button type="button" id="loginButton">Login</button>
+            <button type="button" id="signupButton" class="secondary">Signup</button>
+            <button type="button" id="logoutButton" class="secondary">Logout</button>
+          </div>
+
+          <p id="authStatus" class="auth-status">Login to save review history permanently in Firebase.</p>
+        </section>
+
+        <form id="reviewForm" class="review-form">
+          <label>
+            Public GitHub pull request URL
+            <input
+              id="prUrl"
+              type="url"
+              placeholder="https://github.com/owner/repo/pull/123"
+            />
+          </label>
+
+          <div class="actions">
+            <button type="button" id="fetchButton">Fetch PR</button>
+            <button type="button" id="sampleButton" class="secondary">Sample</button>
+          </div>
+
+          <p id="fetchStatus" class="fetch-status">
+            Paste a public GitHub PR URL to fetch title, description, files, and patch data.
+          </p>
+
+          <label>
+            PR title
+            <input id="prTitle" type="text" placeholder="Example: Add auth middleware" required />
+          </label>
+
+          <label>
+            PR description
+            <textarea
+              id="prDescription"
+              rows="5"
+              placeholder="Summarize the change, context, and testing notes"
+            ></textarea>
+          </label>
+
+          <label>
+            Changed files
+            <textarea
+              id="changedFiles"
+              rows="4"
+              placeholder="src/auth.js&#10;src/routes.js&#10;tests/auth.test.js"
+            ></textarea>
+          </label>
+
+          <label>
+            Code diff or patch
+            <textarea
+              id="codeDiff"
+              rows="10"
+              placeholder="+ const token = localStorage.getItem('token')"
+              required
+            ></textarea>
+          </label>
+
+          <div class="actions">
+            <button type="submit" id="reviewButton">Review Pull Request</button>
+          </div>
+        </form>
+
+        <section id="reviewHistory" class="history-panel" aria-label="Saved review history">
+          <div class="history-header">
+            <div>
+              <p class="eyebrow">Cloud History</p>
+              <h2>Saved Reviews</h2>
+            </div>
+            <button type="button" id="clearHistoryButton" class="secondary small-button">Clear</button>
+          </div>
+          <div id="historyList" class="history-list">
+            <p class="muted-text">Login to save reports in Firebase. Guest reviews stay in this browser.</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel report-panel">
+        <div class="report-toolbar">
+          <div>
+            <p class="eyebrow">Review Output</p>
+            <h2>Risk Dashboard</h2>
+          </div>
+          <div class="actions compact">
+            <button type="button" id="copyButton" class="secondary">Copy</button>
+            <button type="button" id="downloadButton" class="secondary">Download</button>
+            <button type="button" id="printButton" class="secondary">Print</button>
+          </div>
+        </div>
+
+        <article id="report" class="report empty-state">
+          <p>Enter PR details or fetch a public GitHub pull request to generate a review report.</p>
+        </article>
+      </section>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
