@@ -103,20 +103,29 @@ def gemini_review(payload):
         return 500, {"detail": "GEMINI_API_KEY is not configured."}
 
     body = {
-        "model": GEMINI_MODEL,
-        "input": (
-            "Return only strict JSON. Do not wrap it in markdown.\n\n"
-            + build_prompt(payload)
-        ),
+        "contents": [
+            {
+                "role": "user",
+                "parts": [
+                    {
+                        "text": (
+                            "Return only strict JSON. Do not wrap it in markdown.\n\n"
+                            + build_prompt(payload)
+                        )
+                    }
+                ],
+            }
+        ],
+        "generationConfig": {"responseMimeType": "application/json"},
     }
 
     request = urllib.request.Request(
-        "https://generativelanguage.googleapis.com/v1beta/interactions",
+        (
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+        ),
         data=json.dumps(body).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "x-goog-api-key": GEMINI_API_KEY,
-        },
+        headers={"Content-Type": "application/json"},
         method="POST",
     )
 
@@ -129,7 +138,11 @@ def gemini_review(payload):
     except Exception as error:
         return 502, {"detail": str(error)}
 
-    content = data.get("output_text", "") or "{}"
+    try:
+        content = data["candidates"][0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError, TypeError):
+        return 502, {"detail": "Gemini response did not include review text."}
+
     return parse_review_json(content, "Gemini")
 
 
