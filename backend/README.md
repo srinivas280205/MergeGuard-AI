@@ -1,6 +1,6 @@
 # MergeGuard AI Backend
 
-FastAPI backend for real OpenAI-powered pull request review.
+Python backend for real OpenAI-powered pull request review.
 
 ## Local Run
 
@@ -9,14 +9,14 @@ pip install -r requirements.txt
 set OPENAI_API_KEY=your_key_here
 set OPENAI_MODEL=gpt-4o-mini
 set ALLOWED_ORIGIN=http://127.0.0.1:5173
-uvicorn main:app --reload
+python main.py
 ```
 
 ## Render Deploy
 
 - Root directory: `backend`
 - Build command: `pip install -r requirements.txt`
-- Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Start command: `python main.py`
 - Environment variables:
   - `OPENAI_API_KEY`
   - `OPENAI_MODEL`

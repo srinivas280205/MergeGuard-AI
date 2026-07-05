@@ -13,7 +13,7 @@ MergeGuard AI is a GitHub Pull Request Review and Risk Scoring Agent demo. It fe
 - Local saved review history
 - Firebase Auth login/signup
 - Firestore cloud review history for logged-in users
-- Optional FastAPI backend for OpenAI-powered AI review
+- Optional Python backend for OpenAI-powered AI review
 - Copy, Markdown download, and print/save-as-PDF options
 
 ## Free Tech Used
@@ -23,7 +23,7 @@ MergeGuard AI is a GitHub Pull Request Review and Risk Scoring Agent demo. It fe
 - Firebase Auth for login/signup
 - Cloud Firestore for saved review history
 - Browser localStorage for guest history
-- FastAPI + OpenAI API for real AI review
+- Python backend + OpenAI API for real AI review
 - Vercel or GitHub Pages for free hosting
 
 ## Backend AI Review
@@ -38,7 +38,7 @@ Render backend setup:
 
 - Root directory: `backend`
 - Build command: `pip install -r requirements.txt`
-- Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Start command: `python main.py`
 - Environment variables:
   - `OPENAI_API_KEY`
   - `OPENAI_MODEL`
