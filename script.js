@@ -25,6 +25,7 @@ const buttons = {
   logout: document.querySelector("#logoutButton"),
   fetch: document.querySelector("#fetchButton"),
   sample: document.querySelector("#sampleButton"),
+  aiReview: document.querySelector("#aiReviewButton"),
   copy: document.querySelector("#copyButton"),
   download: document.querySelector("#downloadButton"),
   print: document.querySelector("#printButton"),
@@ -32,6 +33,7 @@ const buttons = {
 };
 
 const historyKey = "mergeguard-review-history";
+const API_BASE_URL = "";
 let latestReview = null;
 let currentUser = null;
 let firebaseAuth = null;
@@ -356,6 +358,83 @@ function analyzePullRequest(data) {
     scores,
     strengths: buildStrengths(data, files, hasTests),
   };
+}
+
+function normalizeAiReview(data, aiReview) {
+  const issues = (aiReview.issues || []).map((issue) => ({
+    severity: String(issue.severity || "medium").toLowerCase(),
+    title: issue.title || "AI finding",
+    detail: issue.detail || issue.problem || "",
+    recommendation: issue.recommendation || issue.suggestedFix || "",
+    file: issue.file || "",
+    weight: 0,
+  }));
+
+  const risk = Number(aiReview.risk || aiReview.riskScore || 0);
+
+  return {
+    ...data,
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    createdAt: new Date().toISOString(),
+    files: data.changedFiles
+      .split(/\n|,/)
+      .map((file) => file.trim())
+      .filter(Boolean),
+    issues,
+    risk,
+    label: risk >= 70 ? "High Risk" : risk >= 40 ? "Medium Risk" : risk >= 15 ? "Low Risk" : "Safe",
+    recommendation: aiReview.recommendation || "Request minor changes",
+    scores: aiReview.scores || {
+      Security: 70,
+      Quality: 70,
+      Performance: 70,
+      Maintainability: 70,
+      Testability: 70,
+    },
+    strengths: [
+      aiReview.summary || "AI review completed.",
+      aiReview.securityAnalysis || "",
+      aiReview.finalComment || "",
+    ].filter(Boolean),
+  };
+}
+
+async function runAiReview() {
+  if (!API_BASE_URL) {
+    setFetchStatus("AI backend URL is not configured. Using local rule-based review.", "error");
+    const review = analyzePullRequest(getFormData());
+    renderReview(review);
+    saveReview(review);
+    return;
+  }
+
+  try {
+    buttons.aiReview.disabled = true;
+    buttons.aiReview.textContent = "AI Reviewing...";
+    setFetchStatus("Sending pull request to AI backend...", "loading");
+
+    const response = await fetch(`${API_BASE_URL}/api/ai-review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(getFormData()),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.detail || "AI backend request failed.");
+    }
+
+    const data = await response.json();
+    const review = normalizeAiReview(getFormData(), data.review);
+    renderReview(review);
+    saveReview(review);
+    setFetchStatus("AI review completed.", "success");
+  } catch (error) {
+    setFetchStatus(error.message, "error");
+  } finally {
+    buttons.aiReview.disabled = false;
+    buttons.aiReview.textContent = "AI Review";
+  }
 }
 
 function buildScores(risk, issues, hasTests) {
@@ -690,6 +769,7 @@ buttons.login.addEventListener("click", loginUser);
 buttons.signup.addEventListener("click", signupUser);
 buttons.logout.addEventListener("click", logoutUser);
 buttons.fetch.addEventListener("click", fetchPullRequest);
+buttons.aiReview.addEventListener("click", runAiReview);
 buttons.sample.addEventListener("click", () => {
   setFormData(sampleData);
   setFetchStatus("Sample PR details loaded.", "success");
