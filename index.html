@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <section id="authGate" class="auth-gate" aria-label="Login or signup">
+      <div class="auth-card">
+        <p class="eyebrow">MergeGuard AI</p>
+        <h1>Login to continue</h1>
+        <p class="auth-lede">Create an account or sign in to review pull requests and save reports to Firebase.</p>
+
+        <div class="auth-grid gate-grid">
+          <label>
+            Email
+            <input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+          </label>
+
+          <label>
+            Password
+            <input id="authPassword" type="password" placeholder="Minimum 6 characters" autocomplete="current-password" />
+          </label>
+        </div>
+
+        <div class="actions auth-actions">
+          <button type="button" id="loginButton">Login</button>
+          <button type="button" id="signupButton" class="secondary">Signup</button>
+        </div>
+
+        <p id="authStatus" class="auth-status">Firebase Auth securely validates your credentials.</p>
+      </div>
+    </section>
+
     <main class="app-shell">
       <nav class="top-nav" aria-label="Main navigation">
         <div>
@@ -17,6 +44,7 @@
           <a href="#reviewForm">Review</a>
           <a href="#report">Report</a>
           <a href="#reviewHistory">History</a>
+          <button type="button" id="logoutButton" class="nav-logout">Logout</button>
         </div>
       </nav>
 
@@ -29,34 +57,15 @@
           <span class="status-pill">Login Enabled</span>
         </div>
 
-        <section class="auth-panel" aria-label="Account login and signup">
+        <section class="auth-panel" aria-label="Current account">
           <div class="auth-header">
             <div>
               <p class="eyebrow">Account</p>
-              <h2>Login / Signup</h2>
+              <h2>Signed In</h2>
             </div>
             <span id="userBadge" class="user-badge">Guest</span>
           </div>
-
-          <div class="auth-grid">
-            <label>
-              Email
-              <input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" />
-            </label>
-
-            <label>
-              Password
-              <input id="authPassword" type="password" placeholder="Minimum 6 characters" autocomplete="current-password" />
-            </label>
-          </div>
-
-          <div class="actions auth-actions">
-            <button type="button" id="loginButton">Login</button>
-            <button type="button" id="signupButton" class="secondary">Signup</button>
-            <button type="button" id="logoutButton" class="secondary">Logout</button>
-          </div>
-
-          <p id="authStatus" class="auth-status">Login to save review history permanently in Firebase.</p>
+          <p class="auth-status success">Review history is saved to your Firebase account.</p>
         </section>
 
         <form id="reviewForm" class="review-form">
@@ -125,7 +134,7 @@
             <button type="button" id="clearHistoryButton" class="secondary small-button">Clear</button>
           </div>
           <div id="historyList" class="history-list">
-            <p class="muted-text">Login to save reports in Firebase. Guest reviews stay in this browser.</p>
+            <p class="muted-text">Saved reports will appear here.</p>
           </div>
         </section>
       </section>

@@ -1,4 +1,6 @@
 const reviewForm = document.querySelector("#reviewForm");
+const appShell = document.querySelector(".app-shell");
+const authGate = document.querySelector("#authGate");
 const report = document.querySelector("#report");
 const fetchStatus = document.querySelector("#fetchStatus");
 const historyList = document.querySelector("#historyList");
@@ -102,19 +104,19 @@ function initializeFirebase() {
 
 function updateAuthUi(user) {
   if (user) {
+    authGate.classList.add("hidden");
+    appShell.classList.add("visible");
     userBadge.textContent = user.email;
     setAuthStatus("Logged in. Reviews will save to Firebase Firestore.", "success");
     buttons.logout.disabled = false;
-    buttons.login.disabled = true;
-    buttons.signup.disabled = true;
     return;
   }
 
+  appShell.classList.remove("visible");
+  authGate.classList.remove("hidden");
   userBadge.textContent = "Guest";
-  setAuthStatus("Login to save review history permanently in Firebase.", "");
+  setAuthStatus("Login or signup to enter MergeGuard AI.", "");
   buttons.logout.disabled = true;
-  buttons.login.disabled = false;
-  buttons.signup.disabled = false;
 }
 
 function setAuthStatus(message, state = "") {
@@ -169,7 +171,10 @@ async function logoutUser() {
   if (!firebaseAuth) return;
 
   await firebaseAuth.signOut();
-  setAuthStatus("Logged out. Guest history will stay in this browser.", "");
+  latestReview = null;
+  report.className = "report empty-state";
+  report.innerHTML = "<p>Enter PR details or fetch a public GitHub pull request to generate a review report.</p>";
+  setAuthStatus("Logged out. Login again to continue.", "");
 }
 
 function parsePullRequestUrl(url) {
@@ -523,10 +528,7 @@ async function saveReview(review) {
     }
   }
 
-  const history = loadLocalHistory().filter((item) => item.id !== review.id);
-  history.unshift(review);
-  localStorage.setItem(historyKey, JSON.stringify(history.slice(0, 8)));
-  renderHistory();
+  setAuthStatus("Login is required to save reviews.", "error");
 }
 
 function loadLocalHistory() {
@@ -561,16 +563,12 @@ async function renderHistory() {
       historyList.innerHTML = `<p class="muted-text">Could not load Firestore history: ${escapeHtml(error.message)}</p>`;
       return;
     }
-  } else {
-    history = loadLocalHistory();
   }
 
   visibleHistory = history;
 
   if (!history.length) {
-    historyList.innerHTML = currentUser
-      ? '<p class="muted-text">No cloud reviews saved yet.</p>'
-      : '<p class="muted-text">Login to save reports in Firebase. Guest reviews stay in this browser.</p>';
+    historyList.innerHTML = '<p class="muted-text">No cloud reviews saved yet.</p>';
     return;
   }
 
@@ -611,7 +609,6 @@ async function clearHistory() {
     }
   }
 
-  localStorage.removeItem(historyKey);
   renderHistory();
 }
 
