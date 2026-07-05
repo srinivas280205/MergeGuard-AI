@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-ALLOWED_ORIGIN = os.getenv("ALLOWED_ORIGIN", "*")
+ALLOWED_ORIGIN = os.getenv("ALLOWED_ORIGIN", "*").rstrip("/") or "*"
 PORT = int(os.getenv("PORT", "8000"))
 
 
