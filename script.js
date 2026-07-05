@@ -33,7 +33,7 @@ const buttons = {
 };
 
 const historyKey = "mergeguard-review-history";
-const API_BASE_URL = "";
+const API_BASE_URL = "https://mergeguard-ai-api.onrender.com";
 let latestReview = null;
 let currentUser = null;
 let firebaseAuth = null;

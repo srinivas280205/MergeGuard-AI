@@ -103,8 +103,13 @@ class Handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_json(204, {})
 
+    def do_HEAD(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", ALLOWED_ORIGIN)
+        self.end_headers()
+
     def do_GET(self):
-        if self.path == "/health":
+        if self.path in ("/", "/health"):
             self.send_json(200, {"status": "ok"})
             return
         self.send_json(404, {"detail": "Not found"})
