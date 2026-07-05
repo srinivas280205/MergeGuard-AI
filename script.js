@@ -5,7 +5,6 @@ const report = document.querySelector("#report");
 const fetchStatus = document.querySelector("#fetchStatus");
 const historyList = document.querySelector("#historyList");
 const authStatus = document.querySelector("#authStatus");
-const userBadge = document.querySelector("#userBadge");
 
 const fields = {
   prUrl: document.querySelector("#prUrl"),
@@ -106,7 +105,6 @@ function updateAuthUi(user) {
   if (user) {
     authGate.classList.add("hidden");
     appShell.classList.add("visible");
-    userBadge.textContent = user.email;
     setAuthStatus("Logged in. Reviews will save to Firebase Firestore.", "success");
     buttons.logout.disabled = false;
     return;
@@ -114,7 +112,6 @@ function updateAuthUi(user) {
 
   appShell.classList.remove("visible");
   authGate.classList.remove("hidden");
-  userBadge.textContent = "Guest";
   setAuthStatus("Login or signup to enter MergeGuard AI.", "");
   buttons.logout.disabled = true;
 }

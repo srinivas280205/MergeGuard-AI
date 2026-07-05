@@ -8,29 +8,90 @@
   </head>
   <body>
     <section id="authGate" class="auth-gate" aria-label="Login or signup">
-      <div class="auth-card">
-        <p class="eyebrow">MergeGuard AI</p>
-        <h1>Login to continue</h1>
-        <p class="auth-lede">Create an account or sign in to review pull requests and save reports to Firebase.</p>
+      <div class="home-shell">
+        <section class="home-hero">
+          <div class="home-copy">
+            <p class="eyebrow">AI GitHub PR Review & Risk Scoring Agent</p>
+            <h1>MergeGuard AI</h1>
+            <p>
+              Review GitHub pull requests, detect risky code patterns, score merge risk,
+              and save reviewer-ready reports with Firebase-backed accounts.
+            </p>
+            <div class="home-actions">
+              <a href="#authCard">Get Started</a>
+              <a href="#projectDetails" class="secondary-link">View Project Details</a>
+            </div>
+          </div>
 
-        <div class="auth-grid gate-grid">
-          <label>
-            Email
-            <input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" />
-          </label>
+          <div id="authCard" class="auth-card">
+            <p class="eyebrow">Secure Access</p>
+            <h2>Login / Signup</h2>
+            <p class="auth-lede">Firebase Auth validates credentials and protects saved reports.</p>
 
-          <label>
-            Password
-            <input id="authPassword" type="password" placeholder="Minimum 6 characters" autocomplete="current-password" />
-          </label>
+            <div class="auth-grid gate-grid">
+              <label>
+                Email
+                <input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+              </label>
+
+              <label>
+                Password
+                <input id="authPassword" type="password" placeholder="Minimum 6 characters" autocomplete="current-password" />
+              </label>
+            </div>
+
+            <div class="actions auth-actions">
+              <button type="button" id="loginButton">Login</button>
+              <button type="button" id="signupButton" class="secondary">Signup</button>
+            </div>
+
+            <p id="authStatus" class="auth-status">Firebase Auth securely validates your credentials.</p>
+          </div>
+        </section>
+
+        <section id="projectDetails" class="home-details">
+          <article>
+            <h2>What This Project Does</h2>
+            <p>
+              MergeGuard AI helps reviewers inspect pull request changes before merge.
+              It fetches public GitHub PR data, analyzes changed code, assigns a risk
+              score, and generates a structured dashboard report.
+            </p>
+          </article>
+
+          <div class="feature-grid">
+            <article>
+              <h3>GitHub PR Fetch</h3>
+              <p>Paste a public pull request URL and load the title, description, changed files, and patch data.</p>
+            </article>
+            <article>
+              <h3>Risk Scoring</h3>
+              <p>Detects hardcoded secrets, weak auth logic, missing tests, unsafe patterns, and error-handling gaps.</p>
+            </article>
+            <article>
+              <h3>Review Dashboard</h3>
+              <p>Shows risk score, severity counts, findings, quality scores, and merge recommendation.</p>
+            </article>
+            <article>
+              <h3>Cloud History</h3>
+              <p>Uses Firebase Auth and Firestore so each logged-in user can save and reload review reports.</p>
+            </article>
+          </div>
+
+          <div class="workflow-band">
+            <span>1. Login</span>
+            <span>2. Fetch PR</span>
+            <span>3. Analyze Code</span>
+            <span>4. Score Risk</span>
+            <span>5. Save Report</span>
+          </div>
+        </section>
+
+        <div class="home-footer">
+          <span>Frontend: HTML, CSS, JavaScript</span>
+          <span>Auth & Database: Firebase</span>
+          <span>Hosting target: Vercel</span>
         </div>
-
-        <div class="actions auth-actions">
-          <button type="button" id="loginButton">Login</button>
-          <button type="button" id="signupButton" class="secondary">Signup</button>
-        </div>
-
-        <p id="authStatus" class="auth-status">Firebase Auth securely validates your credentials.</p>
       </div>
     </section>
 
@@ -51,22 +112,11 @@
       <section class="panel input-panel">
         <div class="brand-row">
           <div>
-            <p class="eyebrow">Firebase Auth</p>
-            <h1>MergeGuard AI</h1>
+            <p class="eyebrow">Review Workspace</p>
+            <h1>Pull Request Review</h1>
           </div>
-          <span class="status-pill">Login Enabled</span>
+          <span class="status-pill">Cloud History Enabled</span>
         </div>
-
-        <section class="auth-panel" aria-label="Current account">
-          <div class="auth-header">
-            <div>
-              <p class="eyebrow">Account</p>
-              <h2>Signed In</h2>
-            </div>
-            <span id="userBadge" class="user-badge">Guest</span>
-          </div>
-          <p class="auth-status success">Review history is saved to your Firebase account.</p>
-        </section>
 
         <form id="reviewForm" class="review-form">
           <label>
